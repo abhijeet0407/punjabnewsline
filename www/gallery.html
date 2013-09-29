@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+	<title>Punjabnewline</title>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			
+			<link rel="stylesheet" href="PNL1.css" />
+			<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.0/jquery.mobile.structure-1.3.0.min.css" />
+			<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+			<script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+			<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+             <script type="text/javascript" src="js/index.js"></script>
+            
+            <script>
+			document.addEventListener('deviceready', onDeviceReady, true);
+		  function onDeviceReady() {
+			  
+			 
+                
+                if(navigator.network.connection.type == Connection.NONE)
+                {
+                alert('No Network Connection. Exiting Punjab Newsline');
+                 navigator.app.exitApp();
+                }
+				
+			};
+			
+			function exitAppPopup() {
+    navigator.notification.confirm(
+          'Punjab Newsline?'
+        , function(button) {
+              if (button == 2) {
+                  navigator.app.exitApp();
+              } 
+          }
+        , 'Exit'
+        , 'No,Yes'
+    );  
+    return false;
+}
+function back(){
+
+history.back();         
+}
+			</script>
+			<script type="text/javascript">
+			
+    // Make your jQuery Mobile framework configuration changes here!
+
+  
+
+
+
+
+
+$(document).ready(function(){
+  $.mobile.allowCrossDomainPages = true;
+$.mobile.showPageLoadingMsg();
+
+	
+ 
+
+					   		$.ajax({url: "https://www.punjabnewsline.com/gallery.json",
+					        dataType: "json",
+					        async: true,
+					        success: function (result) {
+					       // $('.news-details').remove();
+					       
+					        ajax.parseJSON(result);
+					        
+					        },
+					        error: function (request,error) {
+					        	
+					          //  alert('Network error has occurred please try again!');
+					        }
+					    });         
+	   				
+});
+
+
+var ajax = { 
+	 parseJSON:function(result){
+	    $.each( result, function(i, row) {
+       
+            $('.gallery-img').append('<li><a data-role="button"   href="#headline'+i+'"><h3><img src='+row.imagea+' /></h3></a></li>');
+          
+          
+        
+        });
+        $.mobile.hidePageLoadingMsg();
+        $('#news-data').listview('refresh');
+    }
+}
+
+				
+				
+			</script>
+		<link href="style.css" rel="stylesheet" media="screen" type="text/css" \>
+	</head>
+	<body>
+	<div data-role="page" id="this_page">
+		<div data-role='header' data-theme='a' data-position="fixed">
+			<a href="#menu-panel" class="ui-btn-left"  data-role="button" data-icon="grid" data-iconpos="left" >Menu</a>
+			<h1 style=" white-space:normal; font-size: 12px;  margin: 1.2em 30% 0.8em;">PUNJAB NEWSLINE</h1>
+		</div>
+		
+		<div data-role="panel" class="menu-panela" id="menu-panel" data-theme="b">
+			
+		<ul  data-role="listview" data-theme="b">
+			<li class="list-menu" data-theme="b">Menu</li>
+			<li><a rel="topnews" href="index.html" data-ajax="false">Home</a></li>
+			<li><a rel="punjab" href="punjab.html"  data-ajax="false">Punjab</a></li>
+			<li><a rel="national" href="national.html"   data-ajax="false">National</a></li>
+			<li><a rel="international" href="international.html"   data-ajax="false">International</a></li>
+			<li><a rel="nri" href="nri.html"   data-ajax="false">NRI</a></li>
+			<li><a rel="featured" href="featured.html"   data-ajax="false">Featured</a></li>
+			<li><a rel="business" href="business.html"   data-ajax="false">Business</a></li>
+			<li><a rel="sports" href="sports.html"   data-ajax="false">Sports</a></li>
+			<li><a rel="entertainment" href="entertainment.html"   data-ajax="false">Entertainment</a></li>
+			<li><a rel="blogs" href="blogs.html"   data-ajax="false">Blogs</a></li>
+			<li><a rel="gallery" href="gallery.html"   data-ajax="false">Gallery</a></li>
+		</ul>
+				
+		</div>
+		
+		
+		<div data-role="content">
+            <ul class="gallery-img"  data-theme="b">
+
+            </ul>
+	        
+        </div>
+		
+		
+		
+	<div class="footer" data-role="footer"  data-position="fixed"><a href="javascript:void(0)"  class="delete ui-btn-left" onclick="exitAppPopup()"  data-role="button" data-icon="delete" data-iconpos="left" >Exit</a>&nbsp;&nbsp;<a  href="javascript:void(0)" class="back  ui-btn-right"  data-role="button" data-icon="back" onclick="back()" data-iconpos="right" >Back</a></div>
+        </div>
+		   
+	     
+	</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+	<title>Punjabnewline</title>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+			<meta name="viewport" content="width=device-width, initial-scale=1">
+			
+			<link rel="stylesheet" href="PNL1.css" />
+			<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile.structure-1.3.1.min.css" />
+			<script src="http://code.jquery.com/jquery-1.8.2.min.js"></script>
+			<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+			<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+            		<script type="text/javascript" src="js/index.js"></script>
+			<script>
+			document.addEventListener('deviceready', onDeviceReady, true);
+		  function onDeviceReady() {
+			   $.mobile.defaultPageTransition = 'none';
+      $.mobile.defaultDialogTransition = 'none';
+      $.mobile.useFastClick = true;
+                
+                 if(navigator.network.connection.type == Connection.NONE)
+                {
+                alert('No Network Connection. Exiting Punjab Newsline');
+                 navigator.app.exitApp();
+                }
+				
+				
+				$(document).on("swipeleft", ".news-details", function() {
+				
+                var page_no=parseInt($(this).attr('rel'))+1;
+               
+                $.mobile.changePage("#headline"+page_no);
+            });
+            
+            
+            $(document).on("swiperight", ".news-details", function() {
+				
+                var page_no=parseInt($(this).attr('rel'))-1;
+              
+                $.mobile.changePage("#headline"+page_no);
+            });
+			
+			
+			};
+			
+			
+				function exitAppPopup() {
+    navigator.notification.confirm(
+          'Punjab Newsline?'
+        , function(button) {
+              if (button == 2) {
+                  navigator.app.exitApp();
+              } 
+          }
+        , 'Exit'
+        , 'No,Yes'
+    );  
+    return false;
+}
+
+function back(){
+
+history.back();         
+}
+			</script>
+			
+			
+			<script type="text/javascript">
+			
+    // Make your jQuery Mobile framework configuration changes here!
+
+  
+
+
+
+
+
+$(document).ready(function(){
+  $.mobile.allowCrossDomainPages = true;
+
+$.mobile.showPageLoadingMsg();
+
+	
+ 
+
+					   		$.ajax({url: "https://www.punjabnewsline.com/national.json",
+					        dataType: "json",
+					        async: true,
+					        success: function (result) {
+					       // $('.news-details').remove();
+					       
+					        ajax.parseJSON(result);
+					        
+					        },
+					        error: function (request,error) {
+					        	
+					          //  alert('Network error has occurred please try again!');
+					        }
+					    });         
+	   				
+});
+
+
+var ajax = { 
+	 parseJSON:function(result){
+	    $.each( result, function(i, row) {
+       
+            $('#news-data').append('<li data-icon="false"><a data-role="button"    href="#headline'+i+'"  data-transition="none"><h3 class="small-title">' +row.title+ '</h3><span class="small-img"><img src="'+row.imagea+'" /></span></a></li>');
+          
+           
+           var story_pages='<div data-role="page" class="news-details" rel='+i+'  id="headline'+i+'"></div>';
+           var story_header='<div data-role="header" data-theme="a"  data-position="fixed"><a href="#menu-panel'+i+'" class="ui-btn-left" data-role="button" data-icon="grid" data-iconpos="left"  >Menu</a><h1 style=" white-space:normal; font-size: 12px;margin: 1.2em 30% 0.8em;">PUNJAB NEWSLINE</h1></div>';
+          
+		   var story_content='<div class="subheader"><div class="type-news">National News</div><div align="right" class="pointers"><a href="#headline'+ String(i-1)+'"' +
+    '         class="prevButton"  data-transition="none"><img src="images/prev.png" /></a>  ' +
+    String(i+1)+'/'+result.length+'      <a href="#headline'+String(i+1)+'"  class="nextButton"  data-transition="none" ><img src="images/next.png" /></a></div></div><div class="news-title">'+row.title+'</div><div class="story_img_cont"><img class="story_img" src="'+row.imagea+'"  /></div><div class="news-date">'+row.date+'</div><div class="story-style">'+row.story+'</div>';
+          var story_nav='<div data-role="panel" class="menu-panela" id="menu-panel'+i+'" data-theme="a"></div>';
+          var story_footer='<div data-role="footer" data-theme="a"  data-position="fixed"><a href="#menu-panel'+i+'" class="ui-btn-left delete" data-role="button" data-icon="grid" data-iconpos="left"  >Exit</a><a href="#menu-panel'+i+'" class="ui-btn-right back" data-role="button" data-icon="grid" data-iconpos="left"  >Exit</a></div>';
+          var story_container='<div data-role="content" id="story-container'+i+'"></div>';
+          $('body').append(story_pages); 
+          $('#headline'+i).append(story_header);
+         $('#headline'+i).append(story_nav);
+         $('#menu-panel'+i).load('nav.html');
+         $('#headline'+i).append(story_container);
+          $('#story-container'+i).append(story_content);
+         $('#headline'+i).append(story_footer);
+        
+        });
+        $.mobile.hidePageLoadingMsg();
+        $('#news-data').listview('refresh');
+    }
+}
+
+				
+				
+			</script>
+		<link href="style.css" rel="stylesheet" media="screen" type="text/css" \>
+	</head>
+	<body>
+	<div data-role="page" id="this_page">
+		<div data-role='header' data-theme='a' data-position="fixed">
+			<a href="#menu-panel" class="ui-btn-left" data-role="button" data-icon="grid" data-iconpos="left" >Menu</a>
+			<h1 style=" white-space:normal; font-size: 12px; margin: 1.2em 30% 0.8em;">PUNJAB NEWSLINE</h1>
+		</div>
+		
+		<div data-role="panel" class="menu-panela" id="menu-panel" data-theme="b">
+			
+		<ul  data-role="listview" data-theme="b">
+			<li class="list-menu" data-theme="b" class="menu-text">Menu</li>
+			<li><a rel="topnews" href="index.html" data-ajax="false">Home</a></li>
+			<li><a rel="punjab" href="punjab.html"  data-ajax="false">Punjab</a></li>
+			<li><a rel="national" href="national.html"   data-ajax="false">National</a></li>
+			<li><a rel="international" href="international.html"   data-ajax="false">International</a></li>
+			<li><a rel="nri" href="nri.html"   data-ajax="false">NRI</a></li>
+			<li><a rel="featured" href="featured.html"   data-ajax="false">Featured</a></li>
+			<li><a rel="business" href="business.html"   data-ajax="false">Business</a></li>
+			<li><a rel="sports" href="sports.html"   data-ajax="false">Sports</a></li>
+			<li><a rel="entertainment" href="entertainment.html"   data-ajax="false">Entertainment</a></li>
+			<li><a rel="blogs" href="blogs.html"   data-ajax="false">Blogs</a></li>
+			<li><a rel="gallery" href="gallery.html"   data-ajax="false">Gallery</a></li>
+		</ul>
+				
+		</div>
+		
+		
+		<div data-role="content">
+            <ul data-role="listview"  id="news-data" data-theme="a">
+
+            </ul>
+	        
+        </div>
+		
+		
+		
+	<div class="footer" data-role="footer"  data-position="fixed"><a href="javascript:void(0)"  class="delete ui-btn-left" onclick="exitAppPopup()"  data-role="button" data-icon="delete" data-iconpos="left" >Exit</a>&nbsp;&nbsp;<a  href="javascript:void(0)" class="back  ui-btn-right"  data-role="button" data-icon="back" onclick="back()" data-iconpos="right" >Back</a></div>
+        </div>
+		   
+	     
+	</body>
+</html>
